@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                // Clone the repository containing the Dockerfile and application code
+                git 'https://github.com/abhaypatil001/docker_images.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build the Docker image using the provided Dockerfile
+                    sh 'docker build -t myapp:1.0 .'
+                }
+            }
+        }
+
+        stage('Verify Docker Image') {
+            steps {
+                script {
+                    // List Docker images to verify the image was built
+                    sh 'docker images'
+                }
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    // Run the Docker container to test the image
+                    sh 'docker run -d --name myapp_container myapp:1.0'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up the container and image after execution
+            sh '''
+                docker rm -f myapp_container || true
+                docker rmi -f myapp:1.0 || true
+            '''
+        }
+        success {
+            echo 'Docker image built and tested successfully!'
+        }
+        failure {
+            echo 'An error occurred during the pipeline.'
+        }
+    }
+}
