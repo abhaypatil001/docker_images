@@ -1,4 +1,4 @@
-name: PR Created Echo
+name: Validate PR Checklist
 
 on:
   pull_request:
@@ -23,7 +23,8 @@ jobs:
           echo "PR Body:"
           echo "$PR_BODY"
 
-          UNCHECKED_COUNT=$(echo "$PR_BODY" | grep '- \[ \]' | wc -l)
+          # Look for lines that contain unchecked boxes like '- [ ]'
+          UNCHECKED_COUNT=$(echo "$PR_BODY" | grep -cE '^- \[ \]')
 
           if [ "$UNCHECKED_COUNT" -eq 0 ]; then
             echo "✅ All checklist items are completed."
