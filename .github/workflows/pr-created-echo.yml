@@ -28,7 +28,9 @@ jobs:
           echo "------------------------------------"
 
           #UNCHECKED_COUNT=$(echo "$PR_BODY" | grep -cE '^- \[ \]')
-          UNCHECKED_COUNT=$(echo "$PR_BODY" | grep -cP '^- \[ \]' || true)
+          #UNCHECKED_COUNT=$(echo "$PR_BODY" | grep -cP '^- \[ \]' || true)
+          UNCHECKED_COUNT=$(echo "$PR_BODY" | awk '/^- \[ \] / || /^- \[ \]$/ { count++ } END { print count+0 }')
+
 
           if [ "$UNCHECKED_COUNT" -eq 0 ]; then
             echo "✅ All checklist items are completed."
