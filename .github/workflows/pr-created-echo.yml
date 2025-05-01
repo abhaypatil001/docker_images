@@ -23,19 +23,21 @@ jobs:
           echo "PR Body:"
           echo "$PR_BODY"
 
-          echo "------ MATCHED UNCHECKED LINES ------"
-          echo "$PR_BODY" | grep -E '^- \[ \]' || echo "✅ No unchecked boxes found"
+          echo "------ Matched Checklist Lines ------"
+          echo "$PR_BODY" | grep -n '\[.*\]' || echo "✅ No checklist items found"
           echo "------------------------------------"
 
-          #UNCHECKED_COUNT=$(echo "$PR_BODY" | grep -cE '^- \[ \]')
-          #UNCHECKED_COUNT=$(echo "$PR_BODY" | grep -cP '^- \[ \]' || true)
-          UNCHECKED_COUNT=$(echo "$PR_BODY" | awk '/^- \[ \] / || /^- \[ \]$/ { count++ } END { print count+0 }')
+          # Safely count exact unchecked checkboxes using awk
+          UNCHECKED_COUNT=$(echo "$PR_BODY" | awk '
+            /^\s*-\s*\[\s*\]\s*/ { count++ }
+            END { print count+0 }
+          ')
 
+          echo "Unchecked count: $UNCHECKED_COUNT"
 
           if [ "$UNCHECKED_COUNT" -eq 0 ]; then
             echo "✅ All checklist items are completed."
           else
             echo "❌ Incomplete checklist detected."
-            echo "$UNCHECKED_COUNT checklist items are still unchecked."
             exit 1
           fi
