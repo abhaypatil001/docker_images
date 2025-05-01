@@ -16,3 +16,19 @@ jobs:
           echo "Author: ${{ github.actor }}"
           echo "Source branch: ${{ github.event.pull_request.head.ref }}"
           echo "Target branch: ${{ github.event.pull_request.base.ref }}"
+          
+          echo "Checking checklist completion..."
+
+          PR_BODY="${{ github.event.pull_request.body }}"
+          echo "PR Body:"
+          echo "$PR_BODY"
+
+          UNCHECKED_COUNT=$(echo "$PR_BODY" | grep '- \[ \]' | wc -l)
+
+          if [ "$UNCHECKED_COUNT" -eq 0 ]; then
+            echo "✅ All checklist items are completed."
+          else
+            echo "❌ Incomplete checklist detected."
+            echo "$UNCHECKED_COUNT checklist items are still unchecked."
+            exit 1
+          fi
