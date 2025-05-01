@@ -2,7 +2,7 @@ name: PR Created Echo
 
 on:
   pull_request:
-    types: [opened]  # Only trigger when a PR is created
+    types: [opened, edited, synchronize]  # Only trigger when a PR is created
 
 jobs:
   echo-pr-details:
