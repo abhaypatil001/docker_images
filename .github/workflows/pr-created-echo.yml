@@ -23,9 +23,11 @@ jobs:
           echo "PR Body:"
           echo "$PR_BODY"
 
-          # Look for lines that contain unchecked boxes like '- [ ]'
-          #UNCHECKED_COUNT=$(echo "$PR_BODY" | grep -cE '^- \[ \]')
-          UNCHECKED_COUNT=$(echo "$PR_BODY" | grep -cP '^- \[\s?\]')
+          echo "------ MATCHED UNCHECKED LINES ------"
+          echo "$PR_BODY" | grep -E '^- \[ \]' || echo "✅ No unchecked boxes found"
+          echo "------------------------------------"
+
+          UNCHECKED_COUNT=$(echo "$PR_BODY" | grep -cE '^- \[ \]')
 
           if [ "$UNCHECKED_COUNT" -eq 0 ]; then
             echo "✅ All checklist items are completed."
