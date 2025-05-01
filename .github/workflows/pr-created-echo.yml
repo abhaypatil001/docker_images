@@ -24,7 +24,8 @@ jobs:
           echo "$PR_BODY"
 
           # Look for lines that contain unchecked boxes like '- [ ]'
-          UNCHECKED_COUNT=$(echo "$PR_BODY" | grep -cE '^- \[ \]')
+          #UNCHECKED_COUNT=$(echo "$PR_BODY" | grep -cE '^- \[ \]')
+          UNCHECKED_COUNT=$(echo "$PR_BODY" | grep -cP '^- \[\s?\]')
 
           if [ "$UNCHECKED_COUNT" -eq 0 ]; then
             echo "✅ All checklist items are completed."
