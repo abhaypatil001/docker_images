@@ -27,7 +27,8 @@ jobs:
           echo "$PR_BODY" | grep -E '^- \[ \]' || echo "✅ No unchecked boxes found"
           echo "------------------------------------"
 
-          UNCHECKED_COUNT=$(echo "$PR_BODY" | grep -cE '^- \[ \]')
+          #UNCHECKED_COUNT=$(echo "$PR_BODY" | grep -cE '^- \[ \]')
+          UNCHECKED_COUNT=$(echo "$PR_BODY" | grep -cE '^- \[ \]' || true)
 
           if [ "$UNCHECKED_COUNT" -eq 0 ]; then
             echo "✅ All checklist items are completed."
