@@ -13,4 +13,3 @@ COPY . /app
 # Specify the command to run the container
 CMD ["bash"]
 
-#this if for git fetch
